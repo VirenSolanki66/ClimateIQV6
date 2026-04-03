@@ -42,16 +42,56 @@ def set_weather_background(description, temp):
     desc = description.lower()
     if any(w in desc for w in ["clear", "sunny"]):
         st.markdown("""
-        <style>.stApp{background:linear-gradient(180deg,#FF6B00 0%,#FF9800 30%,#FFD54F 60%,#87CEEB 100%)!important;}</style>
-        <div id="wbg"><div class="sun"></div><div class="sr sr1"></div><div class="sr sr2"></div><div class="sr sr3"></div><div class="sr sr4"></div><div class="sr sr5"></div><div class="sr sr6"></div><div class="sr sr7"></div><div class="sr sr8"></div></div>
         <style>
-        #wbg{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;overflow:hidden;}
-        .sun{position:absolute;top:50px;left:50%;transform:translateX(-50%);width:130px;height:130px;background:radial-gradient(circle,#FFF176,#FFD600,#FF8F00);border-radius:50%;box-shadow:0 0 60px 30px rgba(255,214,0,0.5),0 0 120px 60px rgba(255,152,0,0.3);animation:spulse 3s ease-in-out infinite;}
-        @keyframes spulse{0%,100%{box-shadow:0 0 60px 30px rgba(255,214,0,0.5),0 0 120px 60px rgba(255,152,0,0.3);}50%{box-shadow:0 0 90px 50px rgba(255,214,0,0.7),0 0 160px 80px rgba(255,152,0,0.4);}}
-        .sr{position:absolute;top:112px;left:calc(50% + 65px);width:90px;height:5px;background:linear-gradient(90deg,rgba(255,230,0,0.9),transparent);border-radius:4px;transform-origin:-65px center;animation:sray 10s linear infinite;}
-        .sr1{transform:rotate(0deg);}.sr2{transform:rotate(45deg);}.sr3{transform:rotate(90deg);}.sr4{transform:rotate(135deg);}.sr5{transform:rotate(180deg);}.sr6{transform:rotate(225deg);}.sr7{transform:rotate(270deg);}.sr8{transform:rotate(315deg);}
-        @keyframes sray{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
-        </style>""", unsafe_allow_html=True)
+        .stApp {
+            background: linear-gradient(180deg,#FF6B00 0%,#FF9800 30%,#FFD54F 60%,#87CEEB 100%) !important;
+        }
+
+        /* Background container */
+        #wbg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;  /* push to background */
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        /* Sun styling */
+        .sun {
+            position: absolute;
+            top: 40px;
+            right: 60px;  /* move sun to corner */
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle,#FFF176,#FFD600,#FF8F00);
+            border-radius: 50%;
+            box-shadow:
+                0 0 40px 20px rgba(255,214,0,0.5),
+                0 0 80px 40px rgba(255,152,0,0.3);
+            animation: spulse 3s ease-in-out infinite;
+        }
+
+        @keyframes spulse {
+            0%,100% {
+                box-shadow:
+                    0 0 40px 20px rgba(255,214,0,0.5),
+                    0 0 80px 40px rgba(255,152,0,0.3);
+            }
+            50% {
+                box-shadow:
+                    0 0 60px 30px rgba(255,214,0,0.7),
+                    0 0 100px 50px rgba(255,152,0,0.4);
+            }
+        }
+        </style>
+
+        <div id="wbg">
+            <div class="sun"></div>
+        </div>
+        """, unsafe_allow_html=True)
 
     elif any(w in desc for w in ["thunder", "storm", "tornado"]):
         drops = "".join([f'<div class="hd" style="left:{i*2}%;animation-delay:{round((i*0.08)%1.5,2)}s;animation-duration:{round(0.3+(i%4)*0.1,2)}s;height:{15+(i%6)*4}px;"></div>' for i in range(50)])
