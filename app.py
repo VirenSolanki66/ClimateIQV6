@@ -40,24 +40,57 @@ html, body, [class*="css"] { font-family: 'Inter', sans-serif; color: #FFFFFF; }
 
 def set_weather_background(description, temp):
     desc = description.lower()
-    # ☀️ SUNNY
     if any(w in desc for w in ["clear", "sunny"]):
-        st.markdown(f"""
+        st.markdown("""
         <style>
-        .stApp {{
-            background: linear-gradient(180deg,#FF6B00 0%,#FF9800 30%,#FFD54F 60%,#87CEEB 100%)!important;
-            transition: background 1s ease-in-out;
-        }}
-        #wbg{{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;}}
-        .sun{{position:absolute;top:50px;left:50%;transform:translateX(-50%);
-        width:130px;height:130px;border-radius:50%;
-        background:radial-gradient(circle,#FFF176,#FFD600,#FF8F00);
-        box-shadow:0 0 60px 30px rgba(255,214,0,{glow});
-        animation:spulse 3s infinite;}}
-        @keyframes spulse{{50%{{transform:scale(1.1);}}}}
-        .stApp > div {{position:relative;z-index:1;}}
+        .stApp {
+            background: linear-gradient(180deg,#FF6B00 0%,#FF9800 30%,#FFD54F 60%,#87CEEB 100%) !important;
+        }
+
+        /* Background container */
+        #wbg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;  /* push to background */
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        /* Sun styling */
+        .sun {
+            position: absolute;
+            top: 40px;
+            right: 60px;  /* move sun to corner */
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle,#FFF176,#FFD600,#FF8F00);
+            border-radius: 50%;
+            box-shadow:
+                0 0 40px 20px rgba(255,214,0,0.5),
+                0 0 80px 40px rgba(255,152,0,0.3);
+            animation: spulse 3s ease-in-out infinite;
+        }
+
+        @keyframes spulse {
+            0%,100% {
+                box-shadow:
+                    0 0 40px 20px rgba(255,214,0,0.5),
+                    0 0 80px 40px rgba(255,152,0,0.3);
+            }
+            50% {
+                box-shadow:
+                    0 0 60px 30px rgba(255,214,0,0.7),
+                    0 0 100px 50px rgba(255,152,0,0.4);
+            }
+        }
         </style>
-        <div id="wbg"><div class="sun"></div></div>
+
+        <div id="wbg">
+            <div class="sun"></div>
+        </div>
         """, unsafe_allow_html=True)
         
     elif any(w in desc for w in ["thunder", "storm", "tornado"]):
