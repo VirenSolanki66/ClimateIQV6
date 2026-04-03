@@ -42,14 +42,13 @@ def set_weather_background(description, temp):
     desc = description.lower()
     if any(w in desc for w in ["clear", "sunny"]):
 
-        # Prevent reloading multiple times (IMPORTANT)
         if "bg_set" not in st.session_state:
             st.session_state.bg_set = True
 
             st.markdown("""
             <style>
             .stApp {
-                background: linear-gradient(180deg,#FF6B00 0%,#FF9800 30%,#FFD54F 60%,#87CEEB 100%) !important;
+                background: linear-gradient(180deg,#FF6B00 0%,#FF9800 40%,#FFD54F 70%,#87CEEB 100%) !important;
             }
 
             #wbg {
@@ -60,22 +59,48 @@ def set_weather_background(description, temp):
                 height: 100%;
                 z-index: -1;
                 pointer-events: none;
+                overflow: hidden;
             }
 
             .sun {
                 position: absolute;
-                top: 40px;
-                right: 60px;
-                width: 100px;
-                height: 100px;
+                top: 60px;
+                right: 80px;
+                width: 110px;
+                height: 110px;
                 background: radial-gradient(circle,#FFF176,#FFD600,#FF8F00);
                 border-radius: 50%;
+
+                /* Soft glow */
                 box-shadow:
-                    0 0 40px 20px rgba(255,214,0,0.5),
-                    0 0 80px 40px rgba(255,152,0,0.3);
+                    0 0 40px rgba(255,214,0,0.6),
+                    0 0 80px rgba(255,152,0,0.4);
+
+                /* Smooth floating animation */
+                animation: floatSun 6s ease-in-out infinite,
+                           glowSun 4s ease-in-out infinite;
             }
 
-            /* Remove animation completely to stop flicker */
+            /* Floating motion (no harsh reset) */
+            @keyframes floatSun {
+                0%   { transform: translateY(0px); }
+                50%  { transform: translateY(-15px); }
+                100% { transform: translateY(0px); }
+            }
+
+            /* Gentle glow breathing */
+            @keyframes glowSun {
+                0%,100% {
+                    box-shadow:
+                        0 0 40px rgba(255,214,0,0.6),
+                        0 0 80px rgba(255,152,0,0.4);
+                }
+                50% {
+                    box-shadow:
+                        0 0 60px rgba(255,214,0,0.8),
+                        0 0 120px rgba(255,152,0,0.5);
+                }
+            }
             </style>
 
             <div id="wbg">
