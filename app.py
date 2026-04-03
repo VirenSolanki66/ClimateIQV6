@@ -262,6 +262,4 @@ if city:
         st.rerun()
 
 st.markdown('<hr class="fancy-divider">', unsafe_allow_html=True)
-st.markdown('<div style="text-align:center;color:#666;font-size:0.8rem;">ClimateIQ  · Built with Streamlit + OpenWeatherMap + Gemini AI + TensorFlow LSTM
-Viren Solanki
-            </div>', unsafe_allow_html=True)
+st.markdown('<div style="text-align:center;color:#666;font-size:0.8rem;">ClimateIQ By Viren Solanki· Built with Streamlit + OpenWeatherMap + Gemini AI + TensorFlow LSTM</div>', unsafe_allow_html=True)
