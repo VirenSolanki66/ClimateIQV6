@@ -41,67 +41,41 @@ html, body, [class*="css"] { font-family: 'Inter', sans-serif; color: #FFFFFF; }
 def set_weather_background(description, temp):
     desc = description.lower()
     if any(w in desc for w in ["clear", "sunny"]):
+        st.markdown("""
+        <style>
+        .stApp {
+            background: linear-gradient(180deg,#FF6B00 0%,#FF9800 40%,#FFD54F 70%,#87CEEB 100%) !important;
+        }
 
-        if "bg_set" not in st.session_state:
-            st.session_state.bg_set = True
+        /* Background container */
+        #wbg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;  /* send to back */
+            pointer-events: none;
+        }
 
-            st.markdown("""
-            <style>
-            .stApp {
-                background: linear-gradient(180deg,#FF6B00 0%,#FF9800 40%,#FFD54F 70%,#87CEEB 100%) !important;
-            }
+        /* Sun (simple, no animation) */
+        .sun {
+            position: absolute;
+            top: 40px;
+            right: 40px;   /* move to corner */
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, #FFF176, #FFD600, #FF8F00);
+            border-radius: 50%;
+            box-shadow: 0 0 40px rgba(255,214,0,0.5);
+        }
+        </style>
 
-            #wbg {
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                z-index: -1;
-                pointer-events: none;
-                overflow: hidden;
-            }
-
-            .sun {
-                position: absolute;
-                top: 60px;
-                right: 80px;
-                width: 110px;
-                height: 110px;
-                border-radius: 50%;
-                background: radial-gradient(circle, #FFF176, #FFD600, #FF8F00);
-
-                /* Combined smooth animations */
-                animation: floatSun 6s ease-in-out infinite,
-                           glowSun 4s ease-in-out infinite;
-            }
-
-            /* Floating movement (UP-DOWN) */
-            @keyframes floatSun {
-                0%, 100% { transform: translateY(0px); }
-                50% { transform: translateY(-15px); }
-            }
-
-            /* Soft glow breathing */
-            @keyframes glowSun {
-                0%, 100% {
-                    box-shadow:
-                        0 0 40px 20px rgba(255,214,0,0.4),
-                        0 0 80px 40px rgba(255,152,0,0.2);
-                }
-                50% {
-                    box-shadow:
-                        0 0 70px 35px rgba(255,214,0,0.6),
-                        0 0 120px 60px rgba(255,152,0,0.3);
-                }
-            }
-
-            </style>
-
-            <div id="wbg">
-                <div class="sun"></div>
-            </div>
-            """, unsafe_allow_html=True)
+        <div id="wbg">
+            <div class="sun"></div>
+        </div>
+        """, unsafe_allow_html=True)
+        
     elif any(w in desc for w in ["thunder", "storm", "tornado"]):
         drops = "".join([f'<div class="hd" style="left:{i*2}%;animation-delay:{round((i*0.08)%1.5,2)}s;animation-duration:{round(0.3+(i%4)*0.1,2)}s;height:{15+(i%6)*4}px;"></div>' for i in range(50)])
         st.markdown(f"""
