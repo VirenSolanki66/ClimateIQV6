@@ -1,6 +1,4 @@
 import streamlit as st
-import matplotlib.pyplot as plt
-import matplotlib.patches as mpatches
 import plotly.graph_objects as go
 import folium
 from streamlit_folium import st_folium
