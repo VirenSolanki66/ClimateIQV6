@@ -68,46 +68,40 @@ def set_weather_background(description, temp):
                 right: 80px;
                 width: 110px;
                 height: 110px;
-                background: radial-gradient(circle,#FFF176,#FFD600,#FF8F00);
                 border-radius: 50%;
+                background: radial-gradient(circle, #FFF176, #FFD600, #FF8F00);
 
-                /* Soft glow */
-                box-shadow:
-                    0 0 40px rgba(255,214,0,0.6),
-                    0 0 80px rgba(255,152,0,0.4);
-
-                /* Smooth floating animation */
+                /* Combined smooth animations */
                 animation: floatSun 6s ease-in-out infinite,
                            glowSun 4s ease-in-out infinite;
             }
 
-            /* Floating motion (no harsh reset) */
+            /* Floating movement (UP-DOWN) */
             @keyframes floatSun {
-                0%   { transform: translateY(0px); }
-                50%  { transform: translateY(-15px); }
-                100% { transform: translateY(0px); }
+                0%, 100% { transform: translateY(0px); }
+                50% { transform: translateY(-15px); }
             }
 
-            /* Gentle glow breathing */
+            /* Soft glow breathing */
             @keyframes glowSun {
-                0%,100% {
+                0%, 100% {
                     box-shadow:
-                        0 0 40px rgba(255,214,0,0.6),
-                        0 0 80px rgba(255,152,0,0.4);
+                        0 0 40px 20px rgba(255,214,0,0.4),
+                        0 0 80px 40px rgba(255,152,0,0.2);
                 }
                 50% {
                     box-shadow:
-                        0 0 60px rgba(255,214,0,0.8),
-                        0 0 120px rgba(255,152,0,0.5);
+                        0 0 70px 35px rgba(255,214,0,0.6),
+                        0 0 120px 60px rgba(255,152,0,0.3);
                 }
             }
+
             </style>
 
             <div id="wbg">
                 <div class="sun"></div>
             </div>
             """, unsafe_allow_html=True)
-
     elif any(w in desc for w in ["thunder", "storm", "tornado"]):
         drops = "".join([f'<div class="hd" style="left:{i*2}%;animation-delay:{round((i*0.08)%1.5,2)}s;animation-duration:{round(0.3+(i%4)*0.1,2)}s;height:{15+(i%6)*4}px;"></div>' for i in range(50)])
         st.markdown(f"""
