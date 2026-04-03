@@ -2,7 +2,6 @@ import streamlit as st
 import plotly.graph_objects as go
 import folium
 from streamlit_folium import st_folium
-
 from utils import get_weather, get_forecast
 from aqi import get_aqi
 from alerts import generate_alerts
