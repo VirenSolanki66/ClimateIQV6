@@ -44,35 +44,112 @@ def set_weather_background(description, temp):
         st.markdown("""
         <style>
         .stApp {
-            background: linear-gradient(180deg,#FF6B00 0%,#FF9800 40%,#FFD54F 70%,#87CEEB 100%) !important;
+            background: linear-gradient(180deg,#FFB74D 0%,#FFD54F 50%,#81D4FA 100%) !important;
         }
 
-        /* Background container */
+        /* Background layer */
         #wbg {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -1;  /* send to back */
+            z-index: -1;
             pointer-events: none;
+            overflow: hidden;
         }
 
-        /* Sun (simple, no animation) */
+        /* ☀️ Soft glowing sun */
         .sun {
             position: absolute;
-            top: 40px;
-            right: 40px;   /* move to corner */
-            width: 100px;
-            height: 100px;
-            background: radial-gradient(circle, #FFF176, #FFD600, #FF8F00);
+            top: 50px;
+            right: 60px;
+            width: 110px;
+            height: 110px;
             border-radius: 50%;
-            box-shadow: 0 0 40px rgba(255,214,0,0.5);
+            background: radial-gradient(circle, #FFF9C4 20%, #FFD54F 60%, #FFB300 100%);
+            box-shadow:
+                0 0 40px rgba(255, 213, 79, 0.6),
+                0 0 80px rgba(255, 179, 0, 0.4),
+                0 0 120px rgba(255, 152, 0, 0.2);
+            animation: glow 4s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%,100% { transform: scale(1); opacity: 0.9; }
+            50% { transform: scale(1.05); opacity: 1; }
+        }
+
+        /* ☁️ Clouds */
+        .cloud {
+            position: absolute;
+            background: #ffffff;
+            border-radius: 50px;
+            opacity: 0.8;
+        }
+
+        .cloud:before, .cloud:after {
+            content: '';
+            position: absolute;
+            background: #ffffff;
+            border-radius: 50%;
+        }
+
+        .cloud1 {
+            width: 120px;
+            height: 50px;
+            top: 120px;
+            left: -150px;
+            animation: moveCloud 40s linear infinite;
+        }
+
+        .cloud1:before {
+            width: 60px;
+            height: 60px;
+            top: -30px;
+            left: 10px;
+        }
+
+        .cloud1:after {
+            width: 80px;
+            height: 80px;
+            top: -40px;
+            right: 10px;
+        }
+
+        .cloud2 {
+            width: 160px;
+            height: 60px;
+            top: 200px;
+            left: -200px;
+            opacity: 0.7;
+            animation: moveCloud 60s linear infinite;
+        }
+
+        .cloud2:before {
+            width: 70px;
+            height: 70px;
+            top: -35px;
+            left: 20px;
+        }
+
+        .cloud2:after {
+            width: 90px;
+            height: 90px;
+            top: -45px;
+            right: 20px;
+        }
+
+        @keyframes moveCloud {
+            from { transform: translateX(0); }
+            to { transform: translateX(120vw); }
         }
         </style>
 
         <div id="wbg">
             <div class="sun"></div>
+            <div class="cloud cloud1"></div>
+            <div class="cloud cloud2"></div>
         </div>
         """, unsafe_allow_html=True)
         
