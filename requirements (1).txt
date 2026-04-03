@@ -1,9 +1,8 @@
 streamlit
-pandas
-numpy
-requests
-scikit-learn
+plotly
 folium
 streamlit-folium
-plotly
-tensorflow-cpu
+requests
+pandas
+numpy
+scikit-learn
