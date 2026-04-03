@@ -40,118 +40,25 @@ html, body, [class*="css"] { font-family: 'Inter', sans-serif; color: #FFFFFF; }
 
 def set_weather_background(description, temp):
     desc = description.lower()
+    # ☀️ SUNNY
     if any(w in desc for w in ["clear", "sunny"]):
-
-        if "bg_set" not in st.session_state:
-            st.session_state.bg_set = True
-
-            st.markdown("""
-            <style>
-            .stApp {
-                background: linear-gradient(180deg,#FF6B00 0%,#FF9800 40%,#FFD54F 70%,#87CEEB 100%) !important;
-            }
-
-            #wbg {
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                z-index: -1;
-                overflow: hidden;
-                pointer-events: none;
-            }
-
-            /* ☀️ Sun (static) */
-            .sun {
-                position: absolute;
-                top: 60px;
-                right: 80px;
-                width: 110px;
-                height: 110px;
-                border-radius: 50%;
-                background: radial-gradient(circle, #FFF176, #FFD600, #FF8F00);
-                box-shadow:
-                    0 0 50px 25px rgba(255,214,0,0.5),
-                    0 0 100px 50px rgba(255,152,0,0.3);
-            }
-
-            /* ☁️ Common cloud */
-            .cloud {
-                position: absolute;
-                background: white;
-                border-radius: 50px;
-            }
-
-            .cloud:before, .cloud:after {
-                content: "";
-                position: absolute;
-                background: white;
-                border-radius: 50%;
-            }
-
-            /* 🌫️ FAR CLOUD (slowest, small, light) */
-            .cloud-far {
-                width: 90px;
-                height: 35px;
-                top: 90px;
-                left: -150px;
-                opacity: 0.5;
-                animation: cloudSlow 80s linear infinite;
-            }
-            .cloud-far:before { width: 40px; height: 40px; top: -15px; left: 10px; }
-            .cloud-far:after  { width: 50px; height: 50px; top: -20px; right: 10px; }
-
-            /* 🌥️ MID CLOUD */
-            .cloud-mid {
-                width: 140px;
-                height: 50px;
-                top: 160px;
-                left: -250px;
-                opacity: 0.7;
-                animation: cloudMid 50s linear infinite;
-            }
-            .cloud-mid:before { width: 60px; height: 60px; top: -20px; left: 20px; }
-            .cloud-mid:after  { width: 80px; height: 80px; top: -30px; right: 15px; }
-
-            /* ☁️ NEAR CLOUD (fastest, big, bold) */
-            .cloud-near {
-                width: 200px;
-                height: 70px;
-                top: 230px;
-                left: -350px;
-                opacity: 0.9;
-                animation: cloudFast 30s linear infinite;
-            }
-            .cloud-near:before { width: 80px; height: 80px; top: -25px; left: 30px; }
-            .cloud-near:after  { width: 100px; height: 100px; top: -35px; right: 25px; }
-
-            /* 🎯 Smooth continuous movement */
-            @keyframes cloudSlow {
-                from { transform: translateX(0); }
-                to { transform: translateX(120vw); }
-            }
-
-            @keyframes cloudMid {
-                from { transform: translateX(0); }
-                to { transform: translateX(130vw); }
-            }
-
-            @keyframes cloudFast {
-                from { transform: translateX(0); }
-                to { transform: translateX(140vw); }
-            }
-
-            </style>
-
-            <div id="wbg">
-                <div class="sun"></div>
-
-                <div class="cloud cloud-far"></div>
-                <div class="cloud cloud-mid"></div>
-                <div class="cloud cloud-near"></div>
-            </div>
-            """, unsafe_allow_html=True)
+        st.markdown(f"""
+        <style>
+        .stApp {{
+            background: linear-gradient(180deg,#FF6B00 0%,#FF9800 30%,#FFD54F 60%,#87CEEB 100%)!important;
+            transition: background 1s ease-in-out;
+        }}
+        #wbg{{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;}}
+        .sun{{position:absolute;top:50px;left:50%;transform:translateX(-50%);
+        width:130px;height:130px;border-radius:50%;
+        background:radial-gradient(circle,#FFF176,#FFD600,#FF8F00);
+        box-shadow:0 0 60px 30px rgba(255,214,0,{glow});
+        animation:spulse 3s infinite;}}
+        @keyframes spulse{{50%{{transform:scale(1.1);}}}}
+        .stApp > div {{position:relative;z-index:1;}}
+        </style>
+        <div id="wbg"><div class="sun"></div></div>
+        """, unsafe_allow_html=True)
         
     elif any(w in desc for w in ["thunder", "storm", "tornado"]):
         drops = "".join([f'<div class="hd" style="left:{i*2}%;animation-delay:{round((i*0.08)%1.5,2)}s;animation-duration:{round(0.3+(i%4)*0.1,2)}s;height:{15+(i%6)*4}px;"></div>' for i in range(50)])
