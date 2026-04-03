@@ -38,42 +38,120 @@ html, body, [class*="css"] { font-family: 'Inter', sans-serif; color: #FFFFFF; }
 """, unsafe_allow_html=True)
 
 
-elif any(w in desc for w in ["clear", "sunny"]):
-    sun = '<div class="sun"></div>'
+def set_weather_background(description, temp):
+    desc = description.lower()
+    if any(w in desc for w in ["clear", "sunny"]):
 
-    st.markdown(f"""
-    <style>
-    .stApp{{{{background:linear-gradient(180deg,#FFB74D 0%,#FFD54F 50%,#81D4FA 100%)!important;}}}}
-    </style>
+        if "bg_set" not in st.session_state:
+            st.session_state.bg_set = True
 
-    <div id="wbg">
-        {sun}
-    </div>
+            st.markdown("""
+            <style>
+            .stApp {
+                background: linear-gradient(180deg,#FF6B00 0%,#FF9800 40%,#FFD54F 70%,#87CEEB 100%) !important;
+            }
 
-    <style>
-    #wbg{{{{
-        position:fixed;
-        top:0;
-        left:0;
-        width:100%;
-        height:100%;
-        z-index:0;
-        pointer-events:none;
-        overflow:hidden;
-    }}}}
+            #wbg {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                z-index: -1;
+                overflow: hidden;
+                pointer-events: none;
+            }
 
-    .sun{{{{
-        position:absolute;
-        top:60px;
-        right:60px;
-        width:100px;
-        height:100px;
-        border-radius:50%;
-        background:radial-gradient(circle,#FFF9C4,#FFD54F,#FFB300);
-        box-shadow:0 0 50px rgba(255,200,0,0.5);
-    }}}}
-    </style>
-    """, unsafe_allow_html=True)
+            /* ☀️ Static Sun */
+            .sun {
+                position: absolute;
+                top: 60px;
+                right: 80px;
+                width: 110px;
+                height: 110px;
+                border-radius: 50%;
+                background: radial-gradient(circle, #FFF176, #FFD600, #FF8F00);
+                box-shadow:
+                    0 0 50px 25px rgba(255,214,0,0.5),
+                    0 0 100px 50px rgba(255,152,0,0.3);
+            }
+
+            /* ☁️ Base cloud style */
+            .cloud {
+                position: absolute;
+                background: white;
+                border-radius: 50px;
+                opacity: 0.85;
+                filter: blur(1px);
+            }
+
+            .cloud:before,
+            .cloud:after {
+                content: "";
+                position: absolute;
+                background: white;
+                border-radius: 50%;
+            }
+
+            /* ☁️ Cloud shapes */
+            .cloud1 {
+                width: 120px;
+                height: 50px;
+                top: 120px;
+                left: -200px;
+                animation: moveCloudsSlow 60s linear infinite;
+            }
+            .cloud1:before { width: 60px; height: 60px; top: -20px; left: 15px; }
+            .cloud1:after  { width: 80px; height: 80px; top: -30px; right: 10px; }
+
+            .cloud2 {
+                width: 180px;
+                height: 60px;
+                top: 200px;
+                left: -300px;
+                animation: moveCloudsMedium 40s linear infinite;
+                opacity: 0.75;
+            }
+            .cloud2:before { width: 70px; height: 70px; top: -25px; left: 25px; }
+            .cloud2:after  { width: 90px; height: 90px; top: -35px; right: 20px; }
+
+            .cloud3 {
+                width: 100px;
+                height: 40px;
+                top: 80px;
+                left: -150px;
+                animation: moveCloudsFast 25s linear infinite;
+                opacity: 0.7;
+            }
+            .cloud3:before { width: 50px; height: 50px; top: -15px; left: 10px; }
+            .cloud3:after  { width: 60px; height: 60px; top: -20px; right: 10px; }
+
+            /* 🌥️ Parallax animations */
+            @keyframes moveCloudsSlow {
+                from { transform: translateX(0); }
+                to { transform: translateX(120vw); }
+            }
+
+            @keyframes moveCloudsMedium {
+                from { transform: translateX(0); }
+                to { transform: translateX(130vw); }
+            }
+
+            @keyframes moveCloudsFast {
+                from { transform: translateX(0); }
+                to { transform: translateX(140vw); }
+            }
+
+            </style>
+
+            <div id="wbg">
+                <div class="sun"></div>
+
+                <div class="cloud cloud1"></div>
+                <div class="cloud cloud2"></div>
+                <div class="cloud cloud3"></div>
+            </div>
+            """, unsafe_allow_html=True)
         
     elif any(w in desc for w in ["thunder", "storm", "tornado"]):
         drops = "".join([f'<div class="hd" style="left:{i*2}%;animation-delay:{round((i*0.08)%1.5,2)}s;animation-duration:{round(0.3+(i%4)*0.1,2)}s;height:{15+(i%6)*4}px;"></div>' for i in range(50)])
