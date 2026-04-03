@@ -377,6 +377,8 @@ if city:
     description = weather_data["weather"][0]["description"].title()
     weather_icon = weather_data["weather"][0]["icon"]
 set_weather_background(description, temp)
+
+
     # ── AQI
     aqi_val, aqi_label, aqi_emoji = get_aqi(lat, lon)
 
