@@ -1,0 +1,21 @@
+# Secrets — NEVER push to GitHub
+.streamlit/secrets.toml
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual env
+venv/
+.env/
+env/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# TensorFlow model cache
+*.h5
+*.keras
