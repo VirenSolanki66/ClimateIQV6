@@ -43,12 +43,11 @@ def set_weather_background(description, temp):
     if any(w in desc for w in ["clear", "sunny"]):
         st.markdown("""
         <style>
-        /* Background */
         .stApp {
             background: linear-gradient(180deg,#FFB74D 0%,#FFD54F 50%,#81D4FA 100%) !important;
         }
 
-        /* Fixed background layer */
+        /* Background layer */
         #wbg {
             position: fixed;
             top: 0;
@@ -57,10 +56,9 @@ def set_weather_background(description, temp):
             height: 100%;
             z-index: -1;
             pointer-events: none;
-            overflow: hidden;
         }
 
-        /* SUN (fixed, stable) */
+        /* ☀️ Sun (static) */
         .sun {
             position: absolute;
             top: 60px;
@@ -72,7 +70,7 @@ def set_weather_background(description, temp):
             box-shadow: 0 0 50px rgba(255,200,0,0.5);
         }
 
-        /* CLOUD BASE */
+        /* ☁️ Cloud base */
         .cloud {
             position: absolute;
             background: white;
@@ -87,12 +85,12 @@ def set_weather_background(description, temp):
             border-radius: 50%;
         }
 
-        /* CLOUD 1 */
+        /* Cloud 1 */
         .cloud1 {
             width: 120px;
             height: 50px;
             top: 120px;
-            animation: cloudMove1 40s linear infinite;
+            left: 20%;
         }
 
         .cloud1::before {
@@ -109,12 +107,12 @@ def set_weather_background(description, temp):
             right: 10px;
         }
 
-        /* CLOUD 2 */
+        /* Cloud 2 */
         .cloud2 {
             width: 160px;
             height: 60px;
             top: 200px;
-            animation: cloudMove2 60s linear infinite;
+            left: 60%;
             opacity: 0.7;
         }
 
@@ -130,17 +128,6 @@ def set_weather_background(description, temp):
             height: 90px;
             top: -45px;
             right: 20px;
-        }
-
-        /* KEYFRAMES (IMPORTANT FIX) */
-        @keyframes cloudMove1 {
-            0%   { left: -150px; }
-            100% { left: 110%; }
-        }
-
-        @keyframes cloudMove2 {
-            0%   { left: -200px; }
-            100% { left: 110%; }
         }
 
         </style>
