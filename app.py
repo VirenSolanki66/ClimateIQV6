@@ -39,39 +39,39 @@ html, body, [class*="css"] { font-family: 'Inter', sans-serif; color: #FFFFFF; }
 
 
 elif any(w in desc for w in ["clear", "sunny"]):
+    sun = '<div class="sun"></div>'
+
     st.markdown(f"""
     <style>
-    .stApp {{
-        background: linear-gradient(180deg,#FFB74D 0%,#FFD54F 50%,#81D4FA 100%) !important;
-    }}
+    .stApp{{{{background:linear-gradient(180deg,#FFB74D 0%,#FFD54F 50%,#81D4FA 100%)!important;}}}}
     </style>
 
     <div id="wbg">
-        <div class="sun"></div>
+        {sun}
     </div>
 
     <style>
-    #wbg {{
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: -1;
-        pointer-events: none;
-        overflow: hidden;
-    }}
+    #wbg{{{{
+        position:fixed;
+        top:0;
+        left:0;
+        width:100%;
+        height:100%;
+        z-index:0;
+        pointer-events:none;
+        overflow:hidden;
+    }}}}
 
-    .sun {{
-        position: absolute;
-        top: 60px;
-        right: 60px;
-        width: 100px;
-        height: 100px;
-        border-radius: 50%;
-        background: radial-gradient(circle, #FFF9C4, #FFD54F, #FFB300);
-        box-shadow: 0 0 50px rgba(255,200,0,0.5);
-    }}
+    .sun{{{{
+        position:absolute;
+        top:60px;
+        right:60px;
+        width:100px;
+        height:100px;
+        border-radius:50%;
+        background:radial-gradient(circle,#FFF9C4,#FFD54F,#FFB300);
+        box-shadow:0 0 50px rgba(255,200,0,0.5);
+    }}}}
     </style>
     """, unsafe_allow_html=True)
         
