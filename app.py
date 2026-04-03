@@ -95,7 +95,244 @@ html, body, [class*="css"] {
 .fancy-divider { border:none; border-top:1px solid #1e2a40; margin:24px 0; }
 </style>
 """, unsafe_allow_html=True)
+def set_weather_background(description, temp):
+    desc = description.lower()
 
+    # ☀️ SUNNY
+    if any(w in desc for w in ["clear", "sunny"]):
+        bg = """
+        <style>
+        .stApp {
+            background: linear-gradient(180deg, #FF8C00 0%, #FFD700 40%, #87CEEB 100%);
+        }
+        </style>
+        <div id="weather-bg">
+            <div class="sun"></div>
+            <div class="sun-ray r1"></div><div class="sun-ray r2"></div>
+            <div class="sun-ray r3"></div><div class="sun-ray r4"></div>
+            <div class="sun-ray r5"></div><div class="sun-ray r6"></div>
+        </div>
+        <style>
+        #weather-bg { position:fixed; top:0; left:0; width:100%; height:100%; z-index:0; pointer-events:none; overflow:hidden; }
+        .sun {
+            position:absolute; top:60px; left:50%;
+            width:120px; height:120px;
+            background: radial-gradient(circle, #FFE500, #FF8C00);
+            border-radius:50%;
+            box-shadow: 0 0 80px 40px rgba(255,220,0,0.4);
+            animation: pulse-sun 3s ease-in-out infinite;
+        }
+        @keyframes pulse-sun {
+            0%,100% { box-shadow: 0 0 80px 40px rgba(255,220,0,0.4); }
+            50% { box-shadow: 0 0 120px 60px rgba(255,200,0,0.6); }
+        }
+        .sun-ray {
+            position:absolute; top:115px; left:calc(50% + 55px);
+            width:80px; height:4px;
+            background: rgba(255,230,0,0.7);
+            border-radius:4px;
+            transform-origin: -55px center;
+            animation: spin-ray 8s linear infinite;
+        }
+        .r1{transform:rotate(0deg);}   .r2{transform:rotate(60deg);}
+        .r3{transform:rotate(120deg);} .r4{transform:rotate(180deg);}
+        .r5{transform:rotate(240deg);} .r6{transform:rotate(300deg);}
+        @keyframes spin-ray { from{transform:rotate(var(--r,0deg));} to{transform:rotate(calc(var(--r,0deg) + 360deg));} }
+        </style>
+        """
+
+    # 🌧️ RAIN
+    elif any(w in desc for w in ["rain", "drizzle", "shower"]):
+        drops = "".join([
+            f'<div class="drop" style="left:{i*2.5}%;animation-delay:{(i*0.13)%2}s;animation-duration:{0.6+(i%5)*0.15}s;height:{10+(i%8)*3}px;opacity:{0.4+(i%5)*0.1};"></div>'
+            for i in range(40)
+        ])
+        bg = f"""
+        <style>
+        .stApp {{
+            background: linear-gradient(180deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+        }}
+        </style>
+        <div id="weather-bg">
+            {drops}
+            <div class="lightning"></div>
+        </div>
+        <style>
+        #weather-bg {{ position:fixed; top:0; left:0; width:100%; height:100%; z-index:0; pointer-events:none; overflow:hidden; }}
+        .drop {{
+            position:absolute; top:-20px; width:2px;
+            background: linear-gradient(180deg, transparent, #89CFF0, #4FC3F7);
+            border-radius:2px;
+            animation: fall linear infinite;
+        }}
+        @keyframes fall {{
+            0% {{ top:-20px; }}
+            100% {{ top:110%; }}
+        }}
+        .lightning {{
+            position:absolute; top:0; left:0; width:100%; height:100%;
+            background: rgba(255,255,255,0);
+            animation: lightning-flash 6s ease-in-out infinite;
+        }}
+        @keyframes lightning-flash {{
+            0%,89%,91%,93%,100% {{ background:rgba(255,255,255,0); }}
+            90%,92% {{ background:rgba(255,255,255,0.08); }}
+        }}
+        </style>
+        """
+
+    # ❄️ SNOW / COLD
+    elif any(w in desc for w in ["snow", "blizzard", "sleet"]) or temp < 2:
+        flakes = "".join([
+            f'<div class="flake" style="left:{i*2.6}%;animation-delay:{(i*0.2)%4}s;animation-duration:{3+(i%4)}s;font-size:{10+(i%3)*6}px;opacity:{0.4+(i%4)*0.15};">❄</div>'
+            for i in range(38)
+        ])
+        bg = f"""
+        <style>
+        .stApp {{
+            background: linear-gradient(180deg, #0a0a1a 0%, #1a2a4a 50%, #2a4a6a 100%);
+        }}
+        </style>
+        <div id="weather-bg">
+            {flakes}
+        </div>
+        <style>
+        #weather-bg {{ position:fixed; top:0; left:0; width:100%; height:100%; z-index:0; pointer-events:none; overflow:hidden; }}
+        .flake {{
+            position:absolute; top:-30px; color:#B0E0FF;
+            animation: snowfall linear infinite;
+            text-shadow: 0 0 8px rgba(176,224,255,0.8);
+        }}
+        @keyframes snowfall {{
+            0% {{ top:-30px; transform:translateX(0) rotate(0deg); }}
+            50% {{ transform:translateX(30px) rotate(180deg); }}
+            100% {{ top:110%; transform:translateX(-20px) rotate(360deg); }}
+        }}
+        </style>
+        """
+
+    # 🌩️ THUNDERSTORM
+    elif any(w in desc for w in ["thunder", "storm", "tornado"]):
+        drops = "".join([
+            f'<div class="drop" style="left:{i*2.5}%;animation-delay:{(i*0.1)%1.5}s;animation-duration:{0.4+(i%4)*0.1}s;height:{15+(i%6)*4}px;"></div>'
+            for i in range(50)
+        ])
+        bg = f"""
+        <style>
+        .stApp {{
+            background: linear-gradient(180deg, #0d0d0d 0%, #1a0a00 50%, #2d1a00 100%);
+        }}
+        </style>
+        <div id="weather-bg">
+            {drops}
+            <div class="big-lightning"></div>
+            <div class="storm-overlay"></div>
+        </div>
+        <style>
+        #weather-bg {{ position:fixed; top:0; left:0; width:100%; height:100%; z-index:0; pointer-events:none; overflow:hidden; }}
+        .drop {{
+            position:absolute; top:-20px; width:2px;
+            background: linear-gradient(180deg, transparent, #607D8B);
+            border-radius:2px;
+            animation: fall linear infinite;
+        }}
+        @keyframes fall {{
+            0% {{ top:-20px; }} 100% {{ top:110%; }}
+        }}
+        .big-lightning {{
+            position:absolute; top:0; left:0; width:100%; height:100%;
+            animation: big-flash 3s ease-in-out infinite;
+        }}
+        @keyframes big-flash {{
+            0%,79%,82%,85%,100% {{ background:rgba(255,255,255,0); }}
+            80%,84% {{ background:rgba(255,200,100,0.12); }}
+            81% {{ background:rgba(255,255,255,0.18); }}
+        }}
+        .storm-overlay {{
+            position:absolute; top:0; left:0; width:100%; height:100%;
+            background: radial-gradient(ellipse at 50% 0%, rgba(255,100,0,0.08) 0%, transparent 70%);
+            animation: storm-pulse 2s ease-in-out infinite;
+        }}
+        @keyframes storm-pulse {{
+            0%,100% {{ opacity:0.5; }} 50% {{ opacity:1; }}
+        }}
+        </style>
+        """
+
+    # 🌫️ FOG / MIST / HAZE
+    elif any(w in desc for w in ["fog", "mist", "haze", "smoke", "dust"]):
+        bg = """
+        <style>
+        .stApp {
+            background: linear-gradient(180deg, #2a2a2a 0%, #3a3a3a 50%, #4a4a4a 100%);
+        }
+        </style>
+        <div id="weather-bg">
+            <div class="fog-layer f1"></div>
+            <div class="fog-layer f2"></div>
+            <div class="fog-layer f3"></div>
+        </div>
+        <style>
+        #weather-bg { position:fixed; top:0; left:0; width:100%; height:100%; z-index:0; pointer-events:none; overflow:hidden; }
+        .fog-layer {
+            position:absolute; width:200%; height:120px;
+            background: linear-gradient(90deg, transparent, rgba(200,200,200,0.15), transparent);
+            border-radius:50%;
+            animation: drift linear infinite;
+        }
+        .f1 { top:20%; animation-duration:18s; animation-delay:0s; }
+        .f2 { top:45%; animation-duration:24s; animation-delay:-8s; opacity:0.7; }
+        .f3 { top:70%; animation-duration:20s; animation-delay:-4s; opacity:0.5; }
+        @keyframes drift {
+            0% { transform:translateX(-50%); }
+            100% { transform:translateX(0%); }
+        }
+        </style>
+        """
+
+    # ☁️ CLOUDY (default)
+    else:
+        clouds = "".join([
+            f'<div class="cloud c{i}" style="top:{15+i*12}%;animation-duration:{20+i*5}s;animation-delay:-{i*4}s;opacity:{0.5+i*0.1};transform:scale({0.6+i*0.15});"></div>'
+            for i in range(5)
+        ])
+        bg = f"""
+        <style>
+        .stApp {{
+            background: linear-gradient(180deg, #1a1a2e 0%, #2d3561 50%, #1a2a4a 100%);
+        }}
+        </style>
+        <div id="weather-bg">
+            {clouds}
+        </div>
+        <style>
+        #weather-bg {{ position:fixed; top:0; left:0; width:100%; height:100%; z-index:0; pointer-events:none; overflow:hidden; }}
+        .cloud {{
+            position:absolute; left:-200px; width:200px; height:60px;
+            background: rgba(180,180,200,0.15);
+            border-radius:50px;
+            box-shadow: 0 0 40px rgba(180,180,200,0.1);
+            animation: float-cloud linear infinite;
+        }}
+        .cloud::before {{
+            content:''; position:absolute; top:-30px; left:40px;
+            width:80px; height:60px;
+            background: rgba(180,180,200,0.15);
+            border-radius:50%;
+        }}
+        .cloud::after {{
+            content:''; position:absolute; top:-20px; left:90px;
+            width:60px; height:50px;
+            background: rgba(180,180,200,0.12);
+            border-radius:50%;
+        }}
+        @keyframes float-cloud {{
+            0% {{ left:-250px; }} 100% {{ left:110%; }}
+        }}
+        </style>
+        """
+
+    st.markdown(bg, unsafe_allow_html=True)
 
 # ─── HEADER ────────────────────────────────────────────────────────────────────
 st.markdown('<div class="main-title">🌍 ClimateIQ ULTRA</div>', unsafe_allow_html=True)
@@ -139,7 +376,7 @@ if city:
     visibility = weather_data.get("visibility", 10000) / 1000  # km
     description = weather_data["weather"][0]["description"].title()
     weather_icon = weather_data["weather"][0]["icon"]
-
+set_weather_background(description, temp)
     # ── AQI
     aqi_val, aqi_label, aqi_emoji = get_aqi(lat, lon)
 
