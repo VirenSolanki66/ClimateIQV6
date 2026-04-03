@@ -62,7 +62,7 @@ def set_weather_background(description, temp):
                 pointer-events: none;
             }
 
-            /* ☀️ Static Sun */
+            /* ☀️ Sun (static) */
             .sun {
                 position: absolute;
                 top: 60px;
@@ -76,68 +76,68 @@ def set_weather_background(description, temp):
                     0 0 100px 50px rgba(255,152,0,0.3);
             }
 
-            /* ☁️ Base cloud style */
+            /* ☁️ Common cloud */
             .cloud {
                 position: absolute;
                 background: white;
                 border-radius: 50px;
-                opacity: 0.85;
-                filter: blur(1px);
             }
 
-            .cloud:before,
-            .cloud:after {
+            .cloud:before, .cloud:after {
                 content: "";
                 position: absolute;
                 background: white;
                 border-radius: 50%;
             }
 
-            /* ☁️ Cloud shapes */
-            .cloud1 {
-                width: 120px;
-                height: 50px;
-                top: 120px;
-                left: -200px;
-                animation: moveCloudsSlow 60s linear infinite;
-            }
-            .cloud1:before { width: 60px; height: 60px; top: -20px; left: 15px; }
-            .cloud1:after  { width: 80px; height: 80px; top: -30px; right: 10px; }
-
-            .cloud2 {
-                width: 180px;
-                height: 60px;
-                top: 200px;
-                left: -300px;
-                animation: moveCloudsMedium 40s linear infinite;
-                opacity: 0.75;
-            }
-            .cloud2:before { width: 70px; height: 70px; top: -25px; left: 25px; }
-            .cloud2:after  { width: 90px; height: 90px; top: -35px; right: 20px; }
-
-            .cloud3 {
-                width: 100px;
-                height: 40px;
-                top: 80px;
+            /* 🌫️ FAR CLOUD (slowest, small, light) */
+            .cloud-far {
+                width: 90px;
+                height: 35px;
+                top: 90px;
                 left: -150px;
-                animation: moveCloudsFast 25s linear infinite;
-                opacity: 0.7;
+                opacity: 0.5;
+                animation: cloudSlow 80s linear infinite;
             }
-            .cloud3:before { width: 50px; height: 50px; top: -15px; left: 10px; }
-            .cloud3:after  { width: 60px; height: 60px; top: -20px; right: 10px; }
+            .cloud-far:before { width: 40px; height: 40px; top: -15px; left: 10px; }
+            .cloud-far:after  { width: 50px; height: 50px; top: -20px; right: 10px; }
 
-            /* 🌥️ Parallax animations */
-            @keyframes moveCloudsSlow {
+            /* 🌥️ MID CLOUD */
+            .cloud-mid {
+                width: 140px;
+                height: 50px;
+                top: 160px;
+                left: -250px;
+                opacity: 0.7;
+                animation: cloudMid 50s linear infinite;
+            }
+            .cloud-mid:before { width: 60px; height: 60px; top: -20px; left: 20px; }
+            .cloud-mid:after  { width: 80px; height: 80px; top: -30px; right: 15px; }
+
+            /* ☁️ NEAR CLOUD (fastest, big, bold) */
+            .cloud-near {
+                width: 200px;
+                height: 70px;
+                top: 230px;
+                left: -350px;
+                opacity: 0.9;
+                animation: cloudFast 30s linear infinite;
+            }
+            .cloud-near:before { width: 80px; height: 80px; top: -25px; left: 30px; }
+            .cloud-near:after  { width: 100px; height: 100px; top: -35px; right: 25px; }
+
+            /* 🎯 Smooth continuous movement */
+            @keyframes cloudSlow {
                 from { transform: translateX(0); }
                 to { transform: translateX(120vw); }
             }
 
-            @keyframes moveCloudsMedium {
+            @keyframes cloudMid {
                 from { transform: translateX(0); }
                 to { transform: translateX(130vw); }
             }
 
-            @keyframes moveCloudsFast {
+            @keyframes cloudFast {
                 from { transform: translateX(0); }
                 to { transform: translateX(140vw); }
             }
@@ -147,9 +147,9 @@ def set_weather_background(description, temp):
             <div id="wbg">
                 <div class="sun"></div>
 
-                <div class="cloud cloud1"></div>
-                <div class="cloud cloud2"></div>
-                <div class="cloud cloud3"></div>
+                <div class="cloud cloud-far"></div>
+                <div class="cloud cloud-mid"></div>
+                <div class="cloud cloud-near"></div>
             </div>
             """, unsafe_allow_html=True)
         
