@@ -38,106 +38,42 @@ html, body, [class*="css"] { font-family: 'Inter', sans-serif; color: #FFFFFF; }
 """, unsafe_allow_html=True)
 
 
-def set_weather_background(description, temp):
-    desc = description.lower()
-    if any(w in desc for w in ["clear", "sunny"]):
-        st.markdown("""
-        <style>
-        .stApp {
-            background: linear-gradient(180deg,#FFB74D 0%,#FFD54F 50%,#81D4FA 100%) !important;
-        }
+elif any(w in desc for w in ["clear", "sunny"]):
+    st.markdown(f"""
+    <style>
+    .stApp {{
+        background: linear-gradient(180deg,#FFB74D 0%,#FFD54F 50%,#81D4FA 100%) !important;
+    }}
+    </style>
 
-        /* Background layer */
-        #wbg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            pointer-events: none;
-        }
+    <div id="wbg">
+        <div class="sun"></div>
+    </div>
 
-        /* ☀️ Sun (static) */
-        .sun {
-            position: absolute;
-            top: 60px;
-            right: 60px;
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            background: radial-gradient(circle, #FFF9C4, #FFD54F, #FFB300);
-            box-shadow: 0 0 50px rgba(255,200,0,0.5);
-        }
+    <style>
+    #wbg {{
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        pointer-events: none;
+        overflow: hidden;
+    }}
 
-        /* ☁️ Cloud base */
-        .cloud {
-            position: absolute;
-            background: white;
-            border-radius: 50px;
-            opacity: 0.8;
-        }
-
-        .cloud::before, .cloud::after {
-            content: "";
-            position: absolute;
-            background: white;
-            border-radius: 50%;
-        }
-
-        /* Cloud 1 */
-        .cloud1 {
-            width: 120px;
-            height: 50px;
-            top: 120px;
-            left: 20%;
-        }
-
-        .cloud1::before {
-            width: 60px;
-            height: 60px;
-            top: -30px;
-            left: 10px;
-        }
-
-        .cloud1::after {
-            width: 80px;
-            height: 80px;
-            top: -40px;
-            right: 10px;
-        }
-
-        /* Cloud 2 */
-        .cloud2 {
-            width: 160px;
-            height: 60px;
-            top: 200px;
-            left: 60%;
-            opacity: 0.7;
-        }
-
-        .cloud2::before {
-            width: 70px;
-            height: 70px;
-            top: -35px;
-            left: 20px;
-        }
-
-        .cloud2::after {
-            width: 90px;
-            height: 90px;
-            top: -45px;
-            right: 20px;
-        }
-
-        </style>
-
-        <div id="wbg">
-            <div class="sun"></div>
-            <div class="cloud cloud1"></div>
-            <div class="cloud cloud2"></div>
-        </div>
-        """, unsafe_allow_html=True)
+    .sun {{
+        position: absolute;
+        top: 60px;
+        right: 60px;
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        background: radial-gradient(circle, #FFF9C4, #FFD54F, #FFB300);
+        box-shadow: 0 0 50px rgba(255,200,0,0.5);
+    }}
+    </style>
+    """, unsafe_allow_html=True)
         
     elif any(w in desc for w in ["thunder", "storm", "tornado"]):
         drops = "".join([f'<div class="hd" style="left:{i*2}%;animation-delay:{round((i*0.08)%1.5,2)}s;animation-duration:{round(0.3+(i%4)*0.1,2)}s;height:{15+(i%6)*4}px;"></div>' for i in range(50)])
