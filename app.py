@@ -311,23 +311,23 @@ if city:
 
     st.markdown('<hr class="fancy-divider">', unsafe_allow_html=True)
 
-    # ─── AI CHATBOT ───────────────────────────────────────────────────────────
-    st.markdown('<div class="section-head">🤖 CLIMATEIQ AI ASSISTANT (Gemini)</div>', unsafe_allow_html=True)
+   # ─── AI CHATBOT ───────────────────────────────────────────────────────────────
+st.markdown('<div class="section-head">🤖 CLIMATEIQ AI ASSISTANT (Gemini)</div>', unsafe_allow_html=True)
 
-    if "chat_history" not in st.session_state:
-        st.session_state.chat_history = []
+if "chat_history" not in st.session_state:
+    st.session_state.chat_history = []
 
-    weather_ctx = {
-        "city": city, "temp": temp, "humidity": humidity, "wind": wind
-    }
+weather_ctx = {
+    "city": city, "temp": temp, "humidity": humidity, "wind": wind
+}
 
-    for role, msg in st.session_state.chat_history:
-        if role == "user":
-            st.markdown(f'<div class="chat-bubble-user">🧑 {msg}</div>', unsafe_allow_html=True)
-        else:
-            st.markdown(f'<div class="chat-bubble-ai">🤖 {msg}</div>', unsafe_allow_html=True)
+for role, msg in st.session_state.chat_history:
+    if role == "user":
+        st.markdown(f'<div class="chat-bubble-user">🧑 {msg}</div>', unsafe_allow_html=True)
+    else:
+        st.markdown(f'<div class="chat-bubble-ai">🤖 {msg}</div>', unsafe_allow_html=True)
 
-    col_q, col_send = st.columns([5, 1])
+col_q, col_send = st.columns([5, 1])
 with col_q:
     user_q = st.text_input(
         "Ask anything about weather, health, travel, climate...",
@@ -339,15 +339,15 @@ with col_send:
     send = st.button("Send 🚀", use_container_width=True)
 
 if send and user_q:
-        st.session_state.chat_history.append(("user", user_q))
-        with st.spinner("🤖 Thinking..."):
-            answer = ask_ai(user_q, weather_ctx)
-        st.session_state.chat_history.append(("ai", answer))
-        st.rerun()
+    st.session_state.chat_history.append(("user", user_q))
+    with st.spinner("🤖 Thinking..."):
+        answer = ask_ai(user_q, weather_ctx)
+    st.session_state.chat_history.append(("ai", answer))
+    st.rerun()
 
-    if st.button("🗑️ Clear Chat"):
-        st.session_state.chat_history = []
-        st.rerun()
+if st.button("🗑️ Clear Chat"):
+    st.session_state.chat_history = []
+    st.rerun()
 
 # ─── FOOTER ────────────────────────────────────────────────────────────────────
 st.markdown('<hr class="fancy-divider">', unsafe_allow_html=True)
