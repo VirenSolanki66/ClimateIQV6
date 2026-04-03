@@ -327,13 +327,18 @@ if city:
         else:
             st.markdown(f'<div class="chat-bubble-ai">🤖 {msg}</div>', unsafe_allow_html=True)
 
+    col_q, col_send = st.columns([5, 1])
+with col_q:
     user_q = st.text_input(
         "Ask anything about weather, health, travel, climate...",
         key="chatbox",
-        placeholder="e.g. Is it safe to travel today? What are heatwave precautions?"
+        placeholder="e.g. Is it safe to travel today?"
     )
+with col_send:
+    st.markdown("<br>", unsafe_allow_html=True)
+    send = st.button("Send 🚀", use_container_width=True)
 
-    if user_q:
+if send and user_q:
         st.session_state.chat_history.append(("user", user_q))
         with st.spinner("🤖 Thinking..."):
             answer = ask_ai(user_q, weather_ctx)
