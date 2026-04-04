@@ -20,10 +20,7 @@ st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Inter:wght@300;400;600&display=swap');
 html, body, [class*="css"] { font-family: 'Inter', sans-serif; color: #002a5c; }
-
-/* ── Clouds BEHIND everything ── */
 #wbg { z-index: -10 !important; }
-
 .main-title {
     font-family:'Orbitron',monospace; font-size:2.8rem; font-weight:700;
     text-align:center;
@@ -37,29 +34,19 @@ html, body, [class*="css"] { font-family: 'Inter', sans-serif; color: #002a5c; }
     margin-bottom:0.5rem; letter-spacing:0.04em;
     font-weight:600; position:relative; z-index:10;
 }
-
-/* Clock bar */
-.clock-bar {
-    text-align:center; padding:8px 0 16px;
-    position:relative; z-index:10;
-}
+.clock-bar { text-align:center; padding:8px 0 16px; position:relative; z-index:10; }
 .clock-time {
     font-family:'Orbitron',monospace; font-size:2rem;
     color:#003d7a; font-weight:700; letter-spacing:0.1em;
     text-shadow: 0 2px 8px rgba(255,255,255,0.6);
 }
-.clock-date {
-    font-size:0.9rem; color:#004a8f; font-weight:600;
-    margin-top:2px; letter-spacing:0.05em;
-}
+.clock-date { font-size:0.9rem; color:#004a8f; font-weight:600; margin-top:2px; letter-spacing:0.05em; }
 .day-badge {
     display:inline-block; margin-left:10px;
     padding:3px 14px; border-radius:999px;
     font-size:0.82rem; font-weight:700;
     letter-spacing:0.04em; vertical-align:middle;
 }
-
-/* Cards */
 .metric-card {
     background:rgba(255,255,255,0.55);
     border:1px solid rgba(255,255,255,0.7);
@@ -72,7 +59,6 @@ html, body, [class*="css"] { font-family: 'Inter', sans-serif; color: #002a5c; }
 .metric-card:hover { transform:translateY(-4px); }
 .metric-val   { font-size:2rem; font-weight:700; color:#003d7a; }
 .metric-label { font-size:0.8rem; color:#0055aa; margin-top:4px; letter-spacing:0.05em; font-weight:600; }
-
 .section-head {
     font-family:'Orbitron',monospace; font-size:1.05rem; color:#003d7a;
     border-left:4px solid #0077cc; padding-left:10px;
@@ -93,8 +79,6 @@ html, body, [class*="css"] { font-family: 'Inter', sans-serif; color: #002a5c; }
 .chat-bubble-user { background:rgba(255,255,255,0.55); border:1px solid rgba(255,255,255,0.6); padding:10px 16px; border-radius:16px 16px 0 16px; margin:6px 0; color:#002a5c; font-weight:500; position:relative; z-index:10; }
 .chat-bubble-ai   { background:rgba(0,100,200,0.12); border:1px solid rgba(0,150,255,0.25); padding:10px 16px; border-radius:16px 16px 16px 0; margin:6px 0; border-left:3px solid #0077cc; color:#001a3a; position:relative; z-index:10; }
 .fancy-divider { border:none; border-top:1px solid rgba(0,100,200,0.2); margin:24px 0; position:relative; z-index:10; }
-
-/* Make all streamlit widgets appear above clouds */
 .stTextInput, .stButton, .stSpinner, .stAlert,
 [data-testid="stMetric"], [data-testid="column"],
 .element-container, .stMarkdown {
@@ -106,7 +90,7 @@ html, body, [class*="css"] { font-family: 'Inter', sans-serif; color: #002a5c; }
 
 
 # ══════════════════════════════════════════════════════════════════════════════
-#  WEATHER BACKGROUND  (clouds BEHIND UI)
+#  WEATHER BACKGROUND
 # ══════════════════════════════════════════════════════════════════════════════
 def set_weather_background(description, temp):
     desc = description.lower()
@@ -115,11 +99,19 @@ def set_weather_background(description, temp):
     if any(w in desc for w in ["clear", "sunny"]) or not any(
         w in desc for w in ["rain","drizzle","shower","thunder","storm","snow","blizzard","sleet","fog","mist","haze","smoke","dust","cloud"]
     ):
-        clouds = "".join([
-            f'<div class="dc" style="top:{6+i*12}%;width:{200+i*65}px;height:{58+i*16}px;'
-            f'animation-duration:{22+i*9}s;animation-delay:-{i*7}s;opacity:{0.80+i*0.04};"></div>'
-            for i in range(4)
-        ])
+        # 3 layers: fast small, medium, slow large — realistic parallax
+        clouds = ""
+        cloud_data = [
+            (4,  150, 45,  7,  0,   0.75),
+            (14, 240, 65,  10, -3,  0.85),
+            (24, 190, 55,  8,  -1,  0.70),
+            (34, 310, 80,  13, -5,  0.90),
+            (44, 170, 50,  9,  -2,  0.78),
+            (54, 260, 70,  11, -4,  0.82),
+        ]
+        for top, w, h, dur, delay, op in cloud_data:
+            clouds += f'<div class="dc" style="top:{top}%;width:{w}px;height:{h}px;animation-duration:{dur}s;animation-delay:{delay}s;opacity:{op};"></div>'
+
         st.markdown(f"""
         <style>.stApp{{background:linear-gradient(180deg,#4FC3F7 0%,#81D4FA 28%,#B3E5FC 58%,#E1F5FE 82%,#f0faff 100%)!important;}}</style>
         <div id="wbg">
@@ -131,20 +123,37 @@ def set_weather_background(description, temp):
         </div>
         <style>
         #wbg{{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-10;pointer-events:none;overflow:hidden;}}
-        .dsun{{position:absolute;top:30px;right:90px;width:110px;height:110px;background:radial-gradient(circle,#FFFDE7 10%,#FFE57F 40%,#FFD600 70%,#FFB300 100%);border-radius:50%;box-shadow:0 0 0 18px rgba(255,230,80,0.14),0 0 0 36px rgba(255,200,0,0.09),0 0 70px 25px rgba(255,210,0,0.35);animation:sunpulse 4s ease-in-out infinite;}}
-        @keyframes sunpulse{{0%,100%{{box-shadow:0 0 0 18px rgba(255,230,80,0.14),0 0 0 36px rgba(255,200,0,0.09),0 0 70px 25px rgba(255,210,0,0.35);}}50%{{box-shadow:0 0 0 24px rgba(255,230,80,0.20),0 0 0 48px rgba(255,200,0,0.12),0 0 95px 38px rgba(255,210,0,0.50);}}}}
-        .dray{{position:absolute;top:83px;right:145px;width:75px;height:4px;background:linear-gradient(90deg,rgba(255,230,50,0.85),transparent);border-radius:4px;transform-origin:right center;animation:rayspin 12s linear infinite;}}
-        .dr1{{transform:rotate(0deg);}}.dr2{{transform:rotate(60deg);}}.dr3{{transform:rotate(120deg);}}.dr4{{transform:rotate(180deg);}}.dr5{{transform:rotate(240deg);}}.dr6{{transform:rotate(300deg);}}
+        .dsun{{position:absolute;top:30px;right:90px;width:110px;height:110px;
+            background:radial-gradient(circle,#FFFDE7 10%,#FFE57F 40%,#FFD600 70%,#FFB300 100%);
+            border-radius:50%;
+            box-shadow:0 0 0 18px rgba(255,230,80,0.14),0 0 0 36px rgba(255,200,0,0.09),0 0 70px 25px rgba(255,210,0,0.35);
+            animation:sunpulse 4s ease-in-out infinite;}}
+        @keyframes sunpulse{{
+            0%,100%{{box-shadow:0 0 0 18px rgba(255,230,80,0.14),0 0 0 36px rgba(255,200,0,0.09),0 0 70px 25px rgba(255,210,0,0.35);}}
+            50%{{box-shadow:0 0 0 24px rgba(255,230,80,0.22),0 0 0 48px rgba(255,200,0,0.12),0 0 100px 40px rgba(255,210,0,0.52);}}
+        }}
+        .dray{{position:absolute;top:83px;right:145px;width:75px;height:4px;
+            background:linear-gradient(90deg,rgba(255,230,50,0.85),transparent);
+            border-radius:4px;transform-origin:right center;animation:rayspin 12s linear infinite;}}
+        .dr1{{transform:rotate(0deg);}}.dr2{{transform:rotate(60deg);}}.dr3{{transform:rotate(120deg);}}
+        .dr4{{transform:rotate(180deg);}}.dr5{{transform:rotate(240deg);}}.dr6{{transform:rotate(300deg);}}
         @keyframes rayspin{{from{{transform:rotate(0deg);}}to{{transform:rotate(360deg);}}}}
-        .dc{{position:absolute;left:-320px;background:rgba(255,255,255,0.90);border-radius:80px;box-shadow:0 6px 24px rgba(100,160,220,0.12),inset 0 -4px 12px rgba(180,220,255,0.18);animation:cloudmove linear infinite;}}
-        .dc::before{{content:'';position:absolute;top:-50%;left:15%;width:52%;height:140%;background:rgba(255,255,255,0.94);border-radius:50%;}}
-        .dc::after{{content:'';position:absolute;top:-38%;left:48%;width:40%;height:115%;background:rgba(245,252,255,0.88);border-radius:50%;}}
-        @keyframes cloudmove{{0%{{left:-320px;}}100%{{left:110%;}}}}
+        .dc{{position:absolute;left:-350px;
+            background:rgba(255,255,255,0.92);
+            border-radius:80px;
+            box-shadow:0 6px 20px rgba(100,160,220,0.10),inset 0 -4px 10px rgba(180,220,255,0.15);
+            animation:cloudmove linear infinite;}}
+        .dc::before{{content:'';position:absolute;top:-50%;left:15%;width:52%;height:140%;background:rgba(255,255,255,0.95);border-radius:50%;}}
+        .dc::after{{content:'';position:absolute;top:-38%;left:48%;width:40%;height:115%;background:rgba(245,252,255,0.90);border-radius:50%;}}
+        @keyframes cloudmove{{0%{{left:-350px;}}100%{{left:110%;}}}}
         </style>""", unsafe_allow_html=True)
 
     # ⛈️ THUNDERSTORM
     elif any(w in desc for w in ["thunder", "storm", "tornado"]):
-        drops = "".join([f'<div class="hd" style="left:{i*2}%;animation-delay:{round((i*0.08)%1.5,2)}s;animation-duration:{round(0.3+(i%4)*0.1,2)}s;height:{15+(i%6)*4}px;"></div>' for i in range(50)])
+        drops = "".join([
+            f'<div class="hd" style="left:{i*2}%;animation-delay:{round((i*0.08)%1.5,2)}s;animation-duration:{round(0.3+(i%4)*0.1,2)}s;height:{15+(i%6)*4}px;"></div>'
+            for i in range(50)
+        ])
         st.markdown(f"""
         <style>.stApp{{background:linear-gradient(180deg,#050505 0%,#1a0800 40%,#2d1000 100%)!important;}}</style>
         <div id="wbg">{drops}<div class="bflash"></div></div>
@@ -158,7 +167,10 @@ def set_weather_background(description, temp):
 
     # 🌧️ RAIN
     elif any(w in desc for w in ["rain", "drizzle", "shower"]):
-        drops = "".join([f'<div class="rd" style="left:{i*2.5}%;animation-delay:{round((i*0.13)%2.0,2)}s;animation-duration:{round(0.5+(i%6)*0.12,2)}s;height:{8+(i%8)*3}px;opacity:{round(0.3+(i%5)*0.12,2)};"></div>' for i in range(40)])
+        drops = "".join([
+            f'<div class="rd" style="left:{i*2.5}%;animation-delay:{round((i*0.13)%2.0,2)}s;animation-duration:{round(0.5+(i%6)*0.12,2)}s;height:{8+(i%8)*3}px;opacity:{round(0.3+(i%5)*0.12,2)};"></div>'
+            for i in range(40)
+        ])
         st.markdown(f"""
         <style>.stApp{{background:linear-gradient(180deg,#0d1b2a 0%,#1a2f4a 50%,#0f2a3d 100%)!important;}}</style>
         <div id="wbg">{drops}<div class="loverlay"></div></div>
@@ -172,7 +184,10 @@ def set_weather_background(description, temp):
 
     # ❄️ SNOW
     elif any(w in desc for w in ["snow","blizzard","sleet"]) or temp < 2:
-        flakes = "".join([f'<div class="sf" style="left:{i*2.7}%;animation-delay:{round((i*0.18)%5,2)}s;animation-duration:{round(3+(i%5),2)}s;font-size:{8+(i%4)*5}px;opacity:{round(0.4+(i%4)*0.15,2)};color:#B3E5FC;">❄</div>' for i in range(37)])
+        flakes = "".join([
+            f'<div class="sf" style="left:{i*2.7}%;animation-delay:{round((i*0.18)%5,2)}s;animation-duration:{round(3+(i%5),2)}s;font-size:{8+(i%4)*5}px;opacity:{round(0.4+(i%4)*0.15,2)};color:#B3E5FC;">❄</div>'
+            for i in range(37)
+        ])
         st.markdown(f"""
         <style>.stApp{{background:linear-gradient(180deg,#050a1a 0%,#0a1628 50%,#1a2a40 100%)!important;}}</style>
         <div id="wbg">{flakes}</div>
@@ -194,66 +209,62 @@ def set_weather_background(description, temp):
         @keyframes fdrift{0%{transform:translateX(-20%);}100%{transform:translateX(20%);}}
         </style>""", unsafe_allow_html=True)
 
-    # ☁️ CLOUDY
+    # ☁️ CLOUDY — realistic multi-speed parallax layers
     else:
-        clouds = "".join([
-            f'<div class="cc" style="top:{6+i*13}%;width:{220+i*55}px;height:{65+i*14}px;'
-            f'animation-duration:{24+i*8}s;animation-delay:-{i*6}s;opacity:{0.88};"></div>'
-            for i in range(5)
-        ])
+        cloud_data = [
+            (3,  160, 48,  6,  0,   0.80),
+            (13, 260, 70,  9,  -2,  0.88),
+            (22, 200, 58,  7,  -1,  0.75),
+            (32, 330, 85,  12, -5,  0.92),
+            (42, 180, 52,  8,  -3,  0.78),
+            (52, 280, 72,  10, -4,  0.85),
+        ]
+        clouds = ""
+        for top, w, h, dur, delay, op in cloud_data:
+            clouds += f'<div class="cc" style="top:{top}%;width:{w}px;height:{h}px;animation-duration:{dur}s;animation-delay:{delay}s;opacity:{op};"></div>'
+
         st.markdown(f"""
         <style>.stApp{{background:linear-gradient(180deg,#5BA3D9 0%,#74B9E8 28%,#A8D5F0 58%,#D0EAFB 82%,#EAF6FF 100%)!important;}}</style>
         <div id="wbg">{clouds}</div>
         <style>
         #wbg{{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-10;pointer-events:none;overflow:hidden;}}
-        .cc{{position:absolute;left:-300px;background:rgba(255,255,255,0.88);border-radius:80px;box-shadow:0 6px 24px rgba(80,140,200,0.12);animation:ccmove linear infinite;}}
-        .cc::before{{content:'';position:absolute;top:-48%;left:16%;width:50%;height:135%;background:rgba(255,255,255,0.92);border-radius:50%;}}
-        .cc::after{{content:'';position:absolute;top:-36%;left:50%;width:38%;height:112%;background:rgba(245,252,255,0.88);border-radius:50%;}}
-        @keyframes ccmove{{0%{{left:-300px;}}100%{{left:110%;}}}}
+        .cc{{position:absolute;left:-360px;
+            background:rgba(255,255,255,0.90);
+            border-radius:80px;
+            box-shadow:0 6px 20px rgba(80,140,200,0.10),inset 0 -3px 8px rgba(180,220,255,0.15);
+            animation:ccmove linear infinite;}}
+        .cc::before{{content:'';position:absolute;top:-48%;left:16%;width:50%;height:135%;background:rgba(255,255,255,0.94);border-radius:50%;}}
+        .cc::after{{content:'';position:absolute;top:-36%;left:50%;width:38%;height:112%;background:rgba(245,252,255,0.90);border-radius:50%;}}
+        @keyframes ccmove{{0%{{left:-360px;}}100%{{left:110%;}}}}
         </style>""", unsafe_allow_html=True)
 
 
 # ══════════════════════════════════════════════════════════════════════════════
-#  LIVE CLOCK  (JavaScript — updates every second)
+#  LIVE CLOCK
 # ══════════════════════════════════════════════════════════════════════════════
 st.markdown("""
 <div class="clock-bar">
     <div class="clock-time" id="liveclock">--:--:--</div>
     <div class="clock-date" id="livedate">Loading...</div>
 </div>
-
 <script>
 function updateClock() {
     const now = new Date();
-
-    // Time
     const h = String(now.getHours()).padStart(2,'0');
     const m = String(now.getMinutes()).padStart(2,'0');
     const s = String(now.getSeconds()).padStart(2,'0');
     document.getElementById('liveclock').textContent = h + ':' + m + ':' + s;
-
-    // Day/Night badge
     const hour = now.getHours();
     let period, color, bg;
-    if (hour >= 5 && hour < 12) {
-        period = '🌅 Morning';   color='#7B3F00'; bg='rgba(255,200,80,0.25)';
-    } else if (hour >= 12 && hour < 17) {
-        period = '☀️ Afternoon'; color='#B34700'; bg='rgba(255,140,0,0.20)';
-    } else if (hour >= 17 && hour < 20) {
-        period = '🌇 Evening';   color='#7B0035'; bg='rgba(255,80,80,0.20)';
-    } else {
-        period = '🌙 Night';     color='#1a237e'; bg='rgba(30,60,180,0.20)';
-    }
-
-    // Date string
-    const days   = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-    const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    if (hour >= 5 && hour < 12)       { period='🌅 Morning';   color='#7B3F00'; bg='rgba(255,200,80,0.25)'; }
+    else if (hour >= 12 && hour < 17) { period='☀️ Afternoon'; color='#B34700'; bg='rgba(255,140,0,0.20)'; }
+    else if (hour >= 17 && hour < 20) { period='🌇 Evening';   color='#7B0035'; bg='rgba(255,80,80,0.20)'; }
+    else                               { period='🌙 Night';     color='#1a237e'; bg='rgba(30,60,180,0.20)'; }
+    const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
     const dateStr = days[now.getDay()] + ', ' + now.getDate() + ' ' + months[now.getMonth()] + ' ' + now.getFullYear();
-
-    document.getElementById('livedate').innerHTML =
-        dateStr +
-        ' &nbsp;<span class="day-badge" style="color:' + color + ';background:' + bg + ';border:1px solid ' + color + '44;">' +
-        period + '</span>';
+    document.getElementById('livedate').innerHTML = dateStr +
+        ' &nbsp;<span class="day-badge" style="color:'+color+';background:'+bg+';border:1px solid '+color+'44;">'+period+'</span>';
 }
 updateClock();
 setInterval(updateClock, 1000);
@@ -261,7 +272,7 @@ setInterval(updateClock, 1000);
 """, unsafe_allow_html=True)
 
 # ── HEADER ────────────────────────────────────────────────────────────────────
-st.markdown('<div class="main-title">🌍 ClimateIQ</div>', unsafe_allow_html=True)
+st.markdown('<div class="main-title"> ClimateIQ</div>', unsafe_allow_html=True)
 st.markdown('<div class="sub-title">AI-Powered Weather Intelligence · Real-Time Analytics · LSTM Forecasting</div>', unsafe_allow_html=True)
 st.markdown('<hr class="fancy-divider">', unsafe_allow_html=True)
 
@@ -390,7 +401,8 @@ if city:
     fig2 = go.Figure()
     fig2.add_trace(go.Bar(
         x=[f"Day {i+1}" for i in range(7)], y=future_preds,
-        marker=dict(color=future_preds, colorscale="RdYlGn_r", showscale=True, colorbar=dict(title="°C", tickfont=dict(color="#003366"))),
+        marker=dict(color=future_preds, colorscale="RdYlGn_r", showscale=True,
+                    colorbar=dict(title="°C", tickfont=dict(color="#003366"))),
         text=[f"{v:.1f}°C" for v in future_preds], textposition="outside",
         textfont=dict(color="#002a5c", size=12),
     ))
@@ -413,7 +425,7 @@ if city:
     weather_ctx = {"city": city, "temp": temp, "humidity": humidity, "wind": wind}
 
     for role, msg in st.session_state.chat_history:
-        css = "chat-bubble-user" if role == "user" else "chat-bubble-ai"
+        css  = "chat-bubble-user" if role == "user" else "chat-bubble-ai"
         icon = "🧑" if role == "user" else "🤖"
         st.markdown(f'<div class="{css}">{icon} {msg}</div>', unsafe_allow_html=True)
 
