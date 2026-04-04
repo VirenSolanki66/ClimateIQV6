@@ -342,9 +342,10 @@ if city:
                 x=[i["dt_txt"][5:16] for i in items],
                 y=[i["main"]["temp"] for i in items],
                 mode="lines+markers",
-                line=dict(color="#0077cc", width=2.5),
-                marker=dict(size=6, color="#FFD600"),
-                fill="tozeroy", fillcolor="rgba(0,119,204,0.10)",
+                line=dict(color="#FF6B00", width=3),
+                marker=dict(size=8, color="#FF6B00",
+                            line=dict(color="#FFFFFF", width=2)),
+                fill="tozeroy", fillcolor="rgba(255,107,0,0.12)",
                 name="Temperature °C",
             ))
             fig.update_layout(
