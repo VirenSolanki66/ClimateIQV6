@@ -342,20 +342,16 @@ if city:
                 x=[i["dt_txt"][5:16] for i in items],
                 y=[i["main"]["temp"] for i in items],
                 mode="lines+markers",
-                line=dict(color="#FF6B00", width=3),
-                marker=dict(size=8, color="#FF6B00",
-                            line=dict(color="#FFFFFF", width=2)),
-                fill="tozeroy", fillcolor="rgba(255,107,0,0.12)",
+               line=dict(color="#0077cc", width=2.5),
+                marker=dict(size=6, color="#FFD600"),
+                fill="tozeroy", fillcolor="rgba(0,119,204,0.10)",
                 name="Temperature °C",
             ))
             fig.update_layout(
                 plot_bgcolor="rgba(255,255,255,0.45)", paper_bgcolor="rgba(255,255,255,0.30)",
-               font=dict(color="#002a5c", size=11),
-                xaxis=dict(gridcolor="rgba(0,60,120,0.20)", tickangle=-30,
-                           tickfont=dict(color="#003d7a", size=10)),
-                yaxis=dict(gridcolor="rgba(0,60,120,0.20)", title="°C",
-                           titlefont=dict(color="#003d7a"),
-                           tickfont=dict(color="#003d7a")),
+               font=dict(color="#003366", size=11),
+                xaxis=dict(gridcolor="rgba(0,80,160,0.15)", tickangle=-30),
+                yaxis=dict(gridcolor="rgba(0,80,160,0.15)", title="°C"),
                 margin=dict(t=10,b=10,l=10,r=10), height=350,
             )
             st.plotly_chart(fig, use_container_width=True)
