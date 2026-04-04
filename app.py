@@ -349,9 +349,12 @@ if city:
             ))
             fig.update_layout(
                 plot_bgcolor="rgba(255,255,255,0.45)", paper_bgcolor="rgba(255,255,255,0.30)",
-                font=dict(color="#003366", size=11),
-                xaxis=dict(gridcolor="rgba(0,80,160,0.15)", tickangle=-30),
-                yaxis=dict(gridcolor="rgba(0,80,160,0.15)", title="°C"),
+               font=dict(color="#002a5c", size=11),
+                xaxis=dict(gridcolor="rgba(0,60,120,0.20)", tickangle=-30,
+                           tickfont=dict(color="#003d7a", size=10)),
+                yaxis=dict(gridcolor="rgba(0,60,120,0.20)", title="°C",
+                           titlefont=dict(color="#003d7a"),
+                           tickfont=dict(color="#003d7a")),
                 margin=dict(t=10,b=10,l=10,r=10), height=350,
             )
             st.plotly_chart(fig, use_container_width=True)
