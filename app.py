@@ -342,14 +342,14 @@ if city:
                 x=[i["dt_txt"][5:16] for i in items],
                 y=[i["main"]["temp"] for i in items],
                 mode="lines+markers",
-               line=dict(color="#0077cc", width=2.5),
+               line=dict(color="#003366", width=2.5),
                 marker=dict(size=6, color="#FFD600"),
                 fill="tozeroy", fillcolor="rgba(0,119,204,0.10)",
                 name="Temperature °C",
             ))
             fig.update_layout(
                 plot_bgcolor="rgba(255,255,255,0.45)", paper_bgcolor="rgba(255,255,255,0.30)",
-               font=dict(color="#0077cc", size=11),
+               font=dict(color="#003366", size=11),
                 xaxis=dict(gridcolor="rgba(0,80,160,0.15)", tickangle=-30),
                 yaxis=dict(gridcolor="rgba(0,80,160,0.15)", title="°C"),
                 margin=dict(t=10,b=10,l=10,r=10), height=350,
