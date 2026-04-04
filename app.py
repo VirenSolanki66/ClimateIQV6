@@ -349,7 +349,7 @@ if city:
             ))
             fig.update_layout(
                 plot_bgcolor="rgba(255,255,255,0.45)", paper_bgcolor="rgba(255,255,255,0.30)",
-               font=dict(color="#003366", size=11),
+               font=dict(color="#0077cc", size=11),
                 xaxis=dict(gridcolor="rgba(0,80,160,0.15)", tickangle=-30),
                 yaxis=dict(gridcolor="rgba(0,80,160,0.15)", title="°C"),
                 margin=dict(t=10,b=10,l=10,r=10), height=350,
