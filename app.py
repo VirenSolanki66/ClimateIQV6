@@ -239,37 +239,6 @@ def set_weather_background(description, temp):
         </style>""", unsafe_allow_html=True)
 
 
-# ══════════════════════════════════════════════════════════════════════════════
-#  LIVE CLOCK
-# ══════════════════════════════════════════════════════════════════════════════
-st.markdown("""
-<div class="clock-bar">
-    <div class="clock-time" id="liveclock">--:--:--</div>
-    <div class="clock-date" id="livedate">Loading...</div>
-</div>
-<script>
-function updateClock() {
-    const now = new Date();
-    const h = String(now.getHours()).padStart(2,'0');
-    const m = String(now.getMinutes()).padStart(2,'0');
-    const s = String(now.getSeconds()).padStart(2,'0');
-    document.getElementById('liveclock').textContent = h + ':' + m + ':' + s;
-    const hour = now.getHours();
-    let period, color, bg;
-    if (hour >= 5 && hour < 12)       { period='🌅 Morning';   color='#7B3F00'; bg='rgba(255,200,80,0.25)'; }
-    else if (hour >= 12 && hour < 17) { period='☀️ Afternoon'; color='#B34700'; bg='rgba(255,140,0,0.20)'; }
-    else if (hour >= 17 && hour < 20) { period='🌇 Evening';   color='#7B0035'; bg='rgba(255,80,80,0.20)'; }
-    else                               { period='🌙 Night';     color='#1a237e'; bg='rgba(30,60,180,0.20)'; }
-    const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-    const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-    const dateStr = days[now.getDay()] + ', ' + now.getDate() + ' ' + months[now.getMonth()] + ' ' + now.getFullYear();
-    document.getElementById('livedate').innerHTML = dateStr +
-        ' &nbsp;<span class="day-badge" style="color:'+color+';background:'+bg+';border:1px solid '+color+'44;">'+period+'</span>';
-}
-updateClock();
-setInterval(updateClock, 1000);
-</script>
-""", unsafe_allow_html=True)
 
 # ── HEADER ────────────────────────────────────────────────────────────────────
 st.markdown('<div class="main-title"> ClimateIQ</div>', unsafe_allow_html=True)
