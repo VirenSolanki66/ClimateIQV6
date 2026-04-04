@@ -158,7 +158,7 @@ def set_weather_background(description, temp):
 
 
 # ─── HEADER ────────────────────────────────────────────────────────────────────
-st.markdown('<div class="main-title">🌍 ClimateIQ </div>', unsafe_allow_html=True)
+st.markdown('<div class="main-title"> ClimateIQ </div>', unsafe_allow_html=True)
 st.markdown('<div class="sub-title">AI-Powered Weather Intelligence · Real-Time Analytics · LSTM Forecasting</div>', unsafe_allow_html=True)
 st.markdown('<hr class="fancy-divider">', unsafe_allow_html=True)
 
